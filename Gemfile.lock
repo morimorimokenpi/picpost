@@ -76,6 +76,8 @@ GEM
     crass (1.0.6)
     debug_inspector (1.1.0)
     erubi (1.10.0)
+    faker (2.18.0)
+      i18n (>= 1.6, < 2)
     ffi (1.15.1)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
@@ -171,6 +173,7 @@ DEPENDENCIES
   binding_of_caller
   bootsnap (>= 1.4.4)
   byebug
+  faker
   graphiql-rails
   graphql
   image_processing (~> 1.2)

@@ -37,6 +37,7 @@ group :development do
   # add
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'faker'
   gem 'graphiql-rails'
 end
 
