@@ -41,8 +41,8 @@ const GET_USERS = gql`
 const Post: React.FC = () => {
   const { loading, error, data } = useQuery<UserProps>(GET_USERS);
 
-  if (loading) return "ロード中...";
-  if (error) return `Error ${error.message}`;
+  if (loading) return <div>"ロード中...";</div>;
+  if (error) return <div>{error.message}</div>;
   return (
     <>
       {data?.users.map((user) => (
