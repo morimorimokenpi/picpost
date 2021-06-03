@@ -1,5 +1,56 @@
 import React from "react";
 import { useQuery, gql } from "@apollo/client";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  IconButton,
+  Card,
+  CardHeader,
+  CardMedia,
+  CardContent,
+  Avatar,
+  Container,
+} from "@material-ui/core";
+import { red } from "@material-ui/core/colors";
+import MenuIcon from "@material-ui/icons/Menu";
+// import { format, parse } from "date-fns";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      flexGrow: 1,
+    },
+    menuButton: {
+      marginRight: theme.spacing(2),
+    },
+    title: {
+      flexGrow: 1,
+    },
+    cardRoot: {
+      maxWidth: 345,
+    },
+    media: {
+      height: 0,
+      paddingTop: "56.25%", // 16:9
+    },
+    expand: {
+      transform: "rotate(0deg)",
+      marginLeft: "auto",
+      transition: theme.transitions.create("transform", {
+        duration: theme.transitions.duration.shortest,
+      }),
+    },
+    expandOpen: {
+      transform: "rotate(180deg)",
+    },
+    avatar: {
+      backgroundColor: red[500],
+    },
+  })
+);
 
 interface UserProps {
   loading: boolean;
@@ -19,6 +70,7 @@ interface Posts {
   title: string;
   content: string;
   userId: number;
+  createdAt: Date;
 }
 
 const GET_USERS = gql`
@@ -33,28 +85,71 @@ const GET_USERS = gql`
         title
         content
         userId
+        createdAt
       }
     }
   }
 `;
 
 const Post: React.FC = () => {
+  const classes = useStyles();
+
   const { loading, error, data } = useQuery<UserProps>(GET_USERS);
 
   if (loading) return <div>"ロード中...";</div>;
   if (error) return <div>{error.message}</div>;
   return (
     <>
+      <div className={classes.root}>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton
+              edge="start"
+              className={classes.menuButton}
+              color="inherit"
+              aria-label="menu"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" className={classes.title}>
+              News
+            </Typography>
+            <Button color="inherit">Login</Button>
+          </Toolbar>
+        </AppBar>
+      </div>
       {data?.users.map((user) => (
-        <div key={user.id}>
-          <h1>{user.nickname}</h1>
-          {user.posts.map((post) => (
-            <div key={post.id}>
-              <h1>{post.title}</h1>
-              <h2>{post.content}</h2>
-            </div>
-          ))}
-        </div>
+        <Container maxWidth="sm">
+          <Card className={classes.cardRoot} key={user.id}>
+            {user.posts.map((post) => (
+              <>
+                <CardHeader
+                  avatar={
+                    <Avatar aria-label="recipe" className={classes.avatar}>
+                      {user.nickname}
+                    </Avatar>
+                  }
+                  title={post.title}
+                  subheader={post.createdAt}
+                />
+                <CardMedia
+                  className={classes.media}
+                  image="/static/images/cards/paella.jpg"
+                  title="Paella dish"
+                />
+                <CardContent>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    {post.content}
+                  </Typography>
+                </CardContent>
+              </>
+            ))}
+          </Card>
+        </Container>
       ))}
     </>
   );
