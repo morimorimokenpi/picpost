@@ -12,9 +12,11 @@ import {
   CardMedia,
   CardContent,
   Avatar,
+  Container,
 } from "@material-ui/core";
 import { red } from "@material-ui/core/colors";
 import MenuIcon from "@material-ui/icons/Menu";
+// import { format, parse } from "date-fns";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -68,6 +70,7 @@ interface Posts {
   title: string;
   content: string;
   userId: number;
+  createdAt: Date;
 }
 
 const GET_USERS = gql`
@@ -82,6 +85,7 @@ const GET_USERS = gql`
         title
         content
         userId
+        createdAt
       }
     }
   }
@@ -115,31 +119,37 @@ const Post: React.FC = () => {
         </AppBar>
       </div>
       {data?.users.map((user) => (
-        <Card className={classes.cardRoot} key={user.id}>
-          {user.posts.map((post) => (
-            <>
-              <CardHeader
-                avatar={
-                  <Avatar aria-label="recipe" className={classes.avatar}>
-                    {user.nickname}
-                  </Avatar>
-                }
-                title={post.title}
-                subheader="September 14, 2016"
-              />
-              <CardMedia
-                className={classes.media}
-                image="/static/images/cards/paella.jpg"
-                title="Paella dish"
-              />
-              <CardContent>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  {post.content}
-                </Typography>
-              </CardContent>
-            </>
-          ))}
-        </Card>
+        <Container maxWidth="sm">
+          <Card className={classes.cardRoot} key={user.id}>
+            {user.posts.map((post) => (
+              <>
+                <CardHeader
+                  avatar={
+                    <Avatar aria-label="recipe" className={classes.avatar}>
+                      {user.nickname}
+                    </Avatar>
+                  }
+                  title={post.title}
+                  subheader={post.createdAt}
+                />
+                <CardMedia
+                  className={classes.media}
+                  image="/static/images/cards/paella.jpg"
+                  title="Paella dish"
+                />
+                <CardContent>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    {post.content}
+                  </Typography>
+                </CardContent>
+              </>
+            ))}
+          </Card>
+        </Container>
       ))}
     </>
   );
