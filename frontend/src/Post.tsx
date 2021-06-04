@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery, gql } from "@apollo/client";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import {
@@ -13,10 +13,25 @@ import {
   CardContent,
   Avatar,
   Container,
+  Modal,
 } from "@material-ui/core";
 import { red } from "@material-ui/core/colors";
 import MenuIcon from "@material-ui/icons/Menu";
 // import { format, parse } from "date-fns";
+
+const rand = () => {
+  return Math.round(Math.random() * 20) - 10;
+};
+
+const getModalStyle = () => {
+  const top = 50 + rand();
+  const left = 50 + rand();
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+};
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,6 +63,14 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     avatar: {
       backgroundColor: red[500],
+    },
+    paper: {
+      position: "absolute",
+      width: 400,
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: theme.spacing(2, 4, 3),
     },
   })
 );
@@ -93,8 +116,27 @@ const GET_USERS = gql`
 
 const Post: React.FC = () => {
   const classes = useStyles();
+  const [modalStyle] = useState(getModalStyle);
+  const [open, setOpen] = useState(false);
 
   const { loading, error, data } = useQuery<UserProps>(GET_USERS);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const body = (
+    <div style={modalStyle} className={classes.paper}>
+      <h2 id="simple-modal-title">Text in a modal</h2>
+      <p id="simple-modal-description">
+        Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+      </p>
+    </div>
+  );
 
   if (loading) return <div>"ロード中...";</div>;
   if (error) return <div>{error.message}</div>;
@@ -114,7 +156,9 @@ const Post: React.FC = () => {
             <Typography variant="h6" className={classes.title}>
               News
             </Typography>
-            <Button color="inherit">Login</Button>
+            <Button color="inherit" onClick={handleOpen}>
+              新規投稿
+            </Button>
           </Toolbar>
         </AppBar>
       </div>
@@ -151,6 +195,14 @@ const Post: React.FC = () => {
           </Card>
         </Container>
       ))}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        {body}
+      </Modal>
     </>
   );
 };
