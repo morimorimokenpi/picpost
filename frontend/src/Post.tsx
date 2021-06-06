@@ -14,6 +14,7 @@ import {
   Avatar,
   Container,
   Modal,
+  TextField,
 } from "@material-ui/core";
 import { red } from "@material-ui/core/colors";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -131,7 +132,7 @@ const Post: React.FC = () => {
 
   const body = (
     <div style={modalStyle} className={classes.paper}>
-      <h2 id="simple-modal-title">Text in a modal</h2>
+      <TextField label="title">Title</TextField>
       <p id="simple-modal-description">
         Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
       </p>
