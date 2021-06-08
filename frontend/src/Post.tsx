@@ -2,7 +2,11 @@ import React from "react";
 import { useQuery, gql } from "@apollo/client";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import {
+  AppBar,
+  Toolbar,
   Typography,
+  Button,
+  IconButton,
   Card,
   CardHeader,
   CardMedia,
@@ -11,15 +15,20 @@ import {
   Container,
 } from "@material-ui/core";
 import { red } from "@material-ui/core/colors";
-import CreatePostModal from "./CreatePostModal";
+import MenuIcon from "@material-ui/icons/Menu";
 // import { format, parse } from "date-fns";
-
-const rand = () => {
-  return Math.round(Math.random() * 20) - 10;
-};
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    root: {
+      flexGrow: 1,
+    },
+    menuButton: {
+      marginRight: theme.spacing(2),
+    },
+    title: {
+      flexGrow: 1,
+    },
     cardRoot: {
       maxWidth: 345,
     },
@@ -84,13 +93,31 @@ const GET_USERS = gql`
 
 const Post: React.FC = () => {
   const classes = useStyles();
+
   const { loading, error, data } = useQuery<UserProps>(GET_USERS);
 
   if (loading) return <div>"ロード中...";</div>;
   if (error) return <div>{error.message}</div>;
   return (
     <>
-      <CreatePostModal />
+      <div className={classes.root}>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton
+              edge="start"
+              className={classes.menuButton}
+              color="inherit"
+              aria-label="menu"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" className={classes.title}>
+              News
+            </Typography>
+            <Button color="inherit">Login</Button>
+          </Toolbar>
+        </AppBar>
+      </div>
       {data?.users.map((user) => (
         <Container maxWidth="sm">
           <Card className={classes.cardRoot} key={user.id}>
