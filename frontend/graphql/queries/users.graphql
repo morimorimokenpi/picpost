@@ -1,0 +1,15 @@
+query users {
+  users {
+    id
+    nickname
+    email
+    passwordDigest
+    posts {
+      id
+      title
+      content
+      userId
+      createdAt
+    }
+  }
+}
