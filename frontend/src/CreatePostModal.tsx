@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { gql, useMutation } from "@apollo/client";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import {
   AppBar,
@@ -11,6 +10,7 @@ import {
   TextField,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
+import { useCreatePostMutation } from "./types.d";
 // import { format, parse } from "date-fns";
 
 const rand = () => {
@@ -49,21 +49,6 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const CREATE_POST = gql`
-  mutation createPost($input: CreatePostInput!) {
-    createPost(input: $input) {
-      post {
-        id
-        title
-        content
-        userId
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-
 const CreatePostModal: React.FC = () => {
   const classes = useStyles();
   const [modalStyle] = useState(getModalStyle);
@@ -72,7 +57,7 @@ const CreatePostModal: React.FC = () => {
   const [content, setContent] = useState("");
   const [userId, setUserId] = useState(3);
 
-  const [createPost, { error, data }] = useMutation(CREATE_POST, {
+  const [createPost, { error, data }] = useCreatePostMutation({
     variables: {
       input: {
         title,

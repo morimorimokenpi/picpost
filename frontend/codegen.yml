@@ -1,5 +1,5 @@
 schema: http://localhost:3000/graphql
-documents: ./graphql/queries/*.graphql
+documents: ./graphql/**/*.graphql # **は特定ディレクトリ以外の全ディレクトリを指定する際に使用
 generates:
   ./src/types.d.ts:
     plugins:

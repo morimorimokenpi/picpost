@@ -1,0 +1,23 @@
+mutation createPost($input: CreatePostInput!) {
+  createPost(input: $input) {
+    post {
+      id
+      title
+      content
+      userId
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+# mutation createPost($title: String, $content: String, $userId: Int) {
+#   createPost(input: { title: $title, content: $content, userId: $userId }) {
+#     id
+#     title
+#     content
+#     userId
+#     createdAt
+#     updatedAt
+#   }
+# }
