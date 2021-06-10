@@ -1,5 +1,4 @@
 import React from "react";
-import { useQuery, gql } from "@apollo/client";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import {
   Typography,
@@ -13,10 +12,7 @@ import {
 import { red } from "@material-ui/core/colors";
 import CreatePostModal from "./CreatePostModal";
 // import { format, parse } from "date-fns";
-
-const rand = () => {
-  return Math.round(Math.random() * 20) - 10;
-};
+import { useUsersQuery } from "./types.d";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -43,48 +39,9 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface UserProps {
-  loading: boolean;
-  users: [User];
-}
-
-interface User {
-  id: string;
-  nickname: string;
-  email: string;
-  passwordDigest: string;
-  posts: [Posts];
-}
-
-interface Posts {
-  id: string;
-  title: string;
-  content: string;
-  userId: number;
-  createdAt: Date;
-}
-
-const GET_USERS = gql`
-  {
-    users {
-      id
-      nickname
-      email
-      passwordDigest
-      posts {
-        id
-        title
-        content
-        userId
-        createdAt
-      }
-    }
-  }
-`;
-
 const Post: React.FC = () => {
   const classes = useStyles();
-  const { loading, error, data } = useQuery<UserProps>(GET_USERS);
+  const { loading, error, data } = useUsersQuery();
 
   if (loading) return <div>"ロード中...";</div>;
   if (error) return <div>{error.message}</div>;
